@@ -21,39 +21,26 @@
     </div class="form-group" >
     <div >
     </div>
-       <button class="btn btn-primary" type="submit">Post!</button>
+       <button class="btn btn-primary" type="submit" onclick="location.reload()">Post!</button>
     </form>
     <hr>
 
-    <!-- test -->
-    <div>
-      <h3>Toro Community Posts!</h3>
-      <table class="table table-stripped table-borders">
-        <thead>
-    
-          <tr>
-            <th>
-              Title
-            </th>
-            <th>
-              Body
-            </th>
-          </tr>
-        </thead>
-        <tbody>          
-          <tr v-for="user_alias in User" >
-            <td>
-              {{user_alias.body}}
-            </td>
-            <td>
-              {{user_alias.body}}
-            </td>
-          </tr>          
-      </table>
-      <h3>End of History.</h3>
-    </div>
-   
-  </div>
+    <center>
+   <table class="table table-striped table-borderes">
+   <thead>
+   <tr>
+     <th> title </th>
+     <th> body </th>
+     <th> Post Date </th>
+   </tr>
+   </thead>
+   <tr v-for="posts_alias in posts">
+   <td class="text-left">{{posts_alias.title}}</td>
+   <td class="text-left">{{posts_alias.body}}</td>
+   <td class="text-left">{{posts_alias.createdOn}}</td>
+   </table>
+
+  </div> <!-- div -->
   <div class="container" v-else>
     
 
@@ -66,25 +53,20 @@
 </template>
 
 <script>
-///* document.querySelector("#addPost").submit() 
 
-    /* disable temp
-    this.$store.dispatch("getPosts");
-    //this.$store.dispatch('getUser')
-    console.log("Here is array of posts co");
-    //console.log(this.$store.state.posts)
-    console.log("END~~~~~~~~~~~~~~~~~~~~~~~~POSTS~~~~~~~~~~~~~~");
-    */
 
 import axios from 'axios';
 export default {
   name: "Home",
   data() {
     return {
+
       User: [],
       title: "",
-      body: "."
+      body: ".",
+      posts: [],
     };
+
   },
 
   methods: {
@@ -109,16 +91,16 @@ export default {
       });
     }
   },
-  mounted(){
-    axios
-      .get("http://127.0.0.1:3000/posts")
-      .then(response => {
-        console.log(response.data);
-        this.User = response.data;
-      })
-      .catch(error => {
-        console.log(error);
-      });
+
+  mounted() {
+ axios.get('http://localhost:3000/posts')
+ .then((response) => {
+ console.log(response.data);
+ this.posts = response.data;
+ })
+.cathc((error) => {
+  console.log(error);
+});
   }
-};
+}
 </script>
