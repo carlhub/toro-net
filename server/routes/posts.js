@@ -17,7 +17,7 @@ _id: false
 }
 
 router.get('/', (req, res) => {
-Post.find({}, (err, posts) => {
+Post.find({},  (err, posts) => {
   if (err) throw err
   if (!posts) {
     const init = new Post({

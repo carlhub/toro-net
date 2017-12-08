@@ -29,9 +29,9 @@ export const mutations = {
    console.log("mutation-call")
     //state.posts.push( posts_payload) 
     console.log("mutation-call--posts_paylaod")
-    console.log(posts_payload)
+   // console.log(posts_payload)
     console.log("mutation-call--state.posts")
-    console.log(state.posts)
+    //console.log(state.posts)
     console.log("~~~~END~~~~MUTATIONS")
 
   }

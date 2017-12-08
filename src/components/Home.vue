@@ -1,9 +1,13 @@
 <template>
+
+
   <div class="container" v-if="this.$store.state.user.displayName">
-    
-  
+      
     <hr>
     <h4>Welcome {{this.$store.state.user.displayName}}! What's happening?</h4>
+    
+    
+    
     <br>
     <form id="addPost" @submit.prevent="Validate" method="post" action='/posts/create'>
     <div class="form-group">
@@ -14,13 +18,47 @@
       <textarea v-model="body" class="form-control" id="body" rows="5"  name="body" placeholder="Write your thoughts here..." data-vv-as="body"  data-vv-delay="500" v-validate="'required'">
       </textarea>
       <p class="text-danger" align="left" v-if="errors.has('body')">{{ errors.first('body') }}</p>
+    </div class="form-group" >
+    <div >
     </div>
        <button class="btn btn-primary" type="submit">Post!</button>
     </form>
     <hr>
+
+    <!-- test -->
+    <div>
+      <h3>Toro Community Posts!</h3>
+      <table class="table table-stripped table-borders">
+        <thead>
+    
+          <tr>
+            <th>
+              Title
+            </th>
+            <th>
+              Body
+            </th>
+          </tr>
+        </thead>
+        <tbody>          
+          <tr v-for="user_alias in User" >
+            <td>
+              {{user_alias.body}}
+            </td>
+            <td>
+              {{user_alias.body}}
+            </td>
+          </tr>          
+      </table>
+      <h3>End of History.</h3>
+    </div>
    
   </div>
   <div class="container" v-else>
+    
+
+
+
     <h4>You must login to access Toro Net!</h4>
     <img src="https://qph.ec.quoracdn.net/main-qimg-0102f6e770d2ce1f45bd7066524b8f70" alt="Avatar" style="width:20% height=20%" class="w3-circle w3-margin-top">
   </div>
@@ -28,54 +66,59 @@
 </template>
 
 <script>
-export default {
-  name: 'Home',
-  data(){
+///* document.querySelector("#addPost").submit() 
 
+    /* disable temp
+    this.$store.dispatch("getPosts");
+    //this.$store.dispatch('getUser')
+    console.log("Here is array of posts co");
+    //console.log(this.$store.state.posts)
+    console.log("END~~~~~~~~~~~~~~~~~~~~~~~~POSTS~~~~~~~~~~~~~~");
+    */
+
+import axios from 'axios';
+export default {
+  name: "Home",
+  data() {
     return {
-      title: ".",
+      User: [],
+      title: "",
       body: "."
-    }
+    };
   },
-  
+
   methods: {
     Validate(e) {
-      e.preventDefault()
-      this.$validator.validateAll().then((result) => {
-        if (result){
-
-          const newPost={
-           userId: this.$store.state.user,
+      e.preventDefault();
+      this.$validator.validateAll().then(result => {
+        if (result) {
+          const newPost = {
+            userId: this.$store.state.user,
             title: this.title,
             body: this.body,
-            createdOn: new Date
+            createdOn: new Date()
+          };
+          console.log(newPost);
           
-          }
-          console.log(newPost)
-          /* document.querySelector("#addPost").submit() */
-          this.$store.dispatch("addPost", newPost )
-          this.body="Write your thoughts here..."
-          this.title=""
-          this.$router.push('/');
-          return
-         }
-      })
+          this.$store.dispatch("addPost", newPost);
+          this.body = "Write your thoughts here...";
+          this.title = "";
+          this.$router.push("/");
+          return;
+        }
+      });
     }
   },
-  mounted() {
-    /*
-    this.$http.get("http://localhost:3000/posts", function(data,status,request)
-    {
-        console.log("~~GETTING DATA FROM VUE/RESOURCE")
-        console.log(data)
-    })
-    */
-    this.$store.dispatch('getPosts')
-    this.$store.dispatch('getUser')
-    console.log("Here is array of posts co")
-    console.log(this.$store.state.posts)
-    console.log("END~~~~~~~~~~~~~~~~~~~~~~~~POSTS~~~~~~~~~~~~~~")
-
-  },
-}
+  mounted(){
+    axios
+      .get("http://127.0.0.1:3000/posts")
+      .then(response => {
+        console.log(response.data);
+        this.User = response.data;
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  }
+};
 </script>
