@@ -22,7 +22,7 @@
 
     <center>
 
-     
+     <!-- 
    <table class="table table-striped table-borderes">
    <thead>
    <tr>
@@ -35,19 +35,36 @@
    <tr >    
      <span v-text="posts_alias.title"   ></span>
      <span v-text="posts_alias.body"   ></span>
-     <span v-text="posts_alias.createdOn"   ></span>
+     <span v-text="posts_alias.createdOn"   ></span>   
+ 
+     </tr>   
 
-   <!--
-   <td class="text-left">{{posts_alias.title}}</td>
-   <td class="text-left">{{posts_alias.body}}</td>   
-   <td class="text-left">{{posts_alias.createdOn}}</td>
-   -->
-   
-     </tr>
-    
    </div >   
-   <infinite-loading @infinite="infiniteHandler"  ></infinite-loading>
+        <infinite-loading @infinite="infiniteHandler"  ></infinite-loading>
+
    </table>     
+  -->
+
+    <div class="columns">
+      <postcard></postcard>
+      <h3>My Feed</h3>
+
+      <div v-for="post in list">
+        <div  class="container2">
+        <div class="content">
+          <div class="title1">{{post.title}}</div>
+          {{post.body}}
+          </div>
+          <div>
+            <div class="postedBy">Posted by: {{post.userId}}</div>
+            <div class="postedOn"> - {{post.createdOn}}</div>
+          </div>
+        </div>
+        <br>
+      </div>  
+<p>-- END FEED --</p>
+
+     <infinite-loading @infinite="infiniteHandler"  ></infinite-loading>
 
   </div> <!-- div -->
   <div class="container" v-else>
@@ -58,6 +75,31 @@
   
 </template>
 
+<!-- Add "scoped" attribute to limit CSS to this component only -->
+<style scoped>
+.container2 {  
+  background-color: lightgrey;
+  padding: 10px;
+  margin: auto;
+}
+.content {
+  padding-bottom: 10px;
+  color: black;
+  font-size: 1.5em;
+}
+.postedBy {
+  text-align: left;
+  color: blue;
+}
+.postedOn {
+  text-align: right;
+  color: red;
+}
+.title1 {
+  text-align: center;
+  font-size: 2em;
+}
+</style>
 <script>
 
 
@@ -102,7 +144,7 @@ export default {
       this.$validator.validateAll().then(result => {
         if (result) {
           const newPost = {
-            userId: this.$store.state.user,
+            userId: this.$store.state.user.username,
             title: this.title,
             body: this.body,
             createdOn: new Date()
