@@ -12,7 +12,8 @@ const express = require('express'),
       users = require('./server/routes/users'),
       posts = require('./server/routes/posts'),
       admin = require('./server/routes/admin'),
-      MongoStore = require('connect-mongo')(session)
+      MongoStore = require('connect-mongo')(session),
+      InfiniteLoading = require('vue-infinite-loading')
 
 require('dotenv').load();
 require('./passport')(passport)

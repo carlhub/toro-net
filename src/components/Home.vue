@@ -1,12 +1,7 @@
 <template>
-
-
-  <div class="container" v-if="this.$store.state.user.displayName">
-      
+  <div class="container" v-if="this.$store.state.user.displayName">      
     <hr>
-    <h4>Welcome {{this.$store.state.user.displayName}}! What's happening?</h4>
-    
-    
+    <h4>Welcome {{this.$store.state.user.displayName}}! What's happening?</h4>    
     
     <br>
     <form id="addPost" @submit.prevent="Validate" method="post" action='/posts/create'>
@@ -21,11 +16,13 @@
     </div class="form-group" >
     <div >
     </div>
-       <button class="btn btn-primary" type="submit" onclick="location.reload()">Post!</button>
+       <button class="btn btn-primary" type="submit" >Post!</button>
     </form>
     <hr>
 
     <center>
+
+     
    <table class="table table-striped table-borderes">
    <thead>
    <tr>
@@ -34,17 +31,26 @@
      <th> Post Date </th>
    </tr>
    </thead>
-   <tr v-for="posts_alias in posts">
+   <div v-for="posts_alias in list">
+   <tr >    
+     <span v-text="posts_alias.title"   ></span>
+     <span v-text="posts_alias.body"   ></span>
+     <span v-text="posts_alias.createdOn"   ></span>
+
+   <!--
    <td class="text-left">{{posts_alias.title}}</td>
-   <td class="text-left">{{posts_alias.body}}</td>
+   <td class="text-left">{{posts_alias.body}}</td>   
    <td class="text-left">{{posts_alias.createdOn}}</td>
-   </table>
+   -->
+   
+     </tr>
+    
+   </div >   
+   <infinite-loading @infinite="infiniteHandler"  ></infinite-loading>
+   </table>     
 
   </div> <!-- div -->
   <div class="container" v-else>
-    
-
-
 
     <h4>You must login to access Toro Net!</h4>
     <img src="https://qph.ec.quoracdn.net/main-qimg-0102f6e770d2ce1f45bd7066524b8f70" alt="Avatar" style="width:20% height=20%" class="w3-circle w3-margin-top">
@@ -56,20 +62,41 @@
 
 
 import axios from 'axios';
+import InfiniteLoading from 'vue-infinite-loading';
+
 export default {
   name: "Home",
   data() {
     return {
-
-      User: [],
-      title: "",
-      body: ".",
+      //User: [],
+      //title: "",
+      //body: ".",
       posts: [],
+      list: []
     };
-
-  },
-
+  },  
   methods: {
+    infiniteHandler($state) {
+      setTimeout(() => {
+        const temp = [];
+        //counter =0;        
+        //if(this.posts.length>this.list.length){
+          for (let i = this.list.length + 1; i <= this.list.length + 20; ) {
+      //for (let i = counter; i <= this.posts.length + 2; i++) {          
+          if(i>this.posts.length){
+            break;
+          }
+          else{
+            temp.push(this.posts[i-1]); 
+            i++   
+          }      
+        }
+        this.list = this.list.concat(temp);
+        $state.loaded();
+
+       // }
+         }, 1000);       
+    },    
     Validate(e) {
       e.preventDefault();
       this.$validator.validateAll().then(result => {
@@ -80,27 +107,44 @@ export default {
             body: this.body,
             createdOn: new Date()
           };
-          console.log(newPost);
-          
+          console.log(newPost);          
           this.$store.dispatch("addPost", newPost);
-          this.body = "Write your thoughts here...";
-          this.title = "";
+          this.title="";
+          this.body="";          
           this.$router.push("/");
           return;
         }
       });
     }
   },
-
+  components: {
+    InfiniteLoading,
+  },
+  
   mounted() {
- axios.get('http://localhost:3000/posts')
- .then((response) => {
- console.log(response.data);
- this.posts = response.data;
- })
-.cathc((error) => {
-  console.log(error);
-});
+    axios.get('http://127.0.0.1:3000/posts')
+      .then((response) => {
+      console.log(response.data);
+      this.posts = response.data;
+      this.posts=this.posts.reverse();
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  },  
+
+  updated(){
+    axios.get('http://127.0.0.1:3000/posts')
+      .then((response) => {
+      console.log(response.data);
+      this.posts = response.data;
+      this.posts=this.posts.reverse();
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }
+  
+
 }
 </script>
