@@ -12,7 +12,7 @@ require('dotenv').load();
 passport.use(new GitHubStrategy({
         clientID: process.env.GITHUB_ID,
         clientSecret: process.env.GITHUB_SECRET,
-        callbackURL: "http://test.toritos.tk/auth/github/callback",
+        callbackURL: "http://toritos.tk/auth/github/callback",
         profileFields : ['displayName','name','email']
       },
       function(accessToken, refreshToken, profile, done) {
