@@ -17,7 +17,7 @@ _id: false
 }
 
 router.get('/', (req, res) => {
-Post.find({}, (err, posts) => {
+Post.find({},  (err, posts) => {
   if (err) throw err
   if (!posts) {
     const init = new Post({
@@ -36,8 +36,9 @@ Post.find({}, (err, posts) => {
     })
   }
   else {
-    console.log('Posts retrieved: ', posts)
-    res.json({ posts })
+    console.log('Posts retrieved (routes): ', posts)
+    //res.json({ posts })
+    res.send(posts)
   }
 })
 })
@@ -143,9 +144,10 @@ Post.find({}, (err, posts) => {
      
 
 router.post('/create', (req, res) => {
-
+console.log("Inside create post endpoint");
 const newPost = new Post({
-  user: req.body.user,
+  ///userId: req.user.id,
+  userId: req.body.userId,
   title: req.body.title,
   body: req.body.body,
   createdOn: new Date
@@ -196,7 +198,12 @@ Post.create(newPost, (err) => {
                   res.json({result})
                 }
           })
-        })    
+        })
+        
+        router.get('/list/all',(req,res)=> {
+           //code to pull all friends of the req.user
+           //code to show posts of friens order by date descending
+        })
 
 
     return router;
