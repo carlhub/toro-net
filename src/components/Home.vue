@@ -144,7 +144,7 @@ export default {
             createdOn: new Date()
           };
           this.posts2Master=this.posts2Master.concat(newPost);
-          this.posts2=this.posts2Master;
+          this.posts2=this.posts2Master.reverse();
           //this.posts2=this.posts2.reverse();
           //this.list=[];
           console.log(newPost);          
