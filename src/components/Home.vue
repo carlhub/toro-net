@@ -10,7 +10,7 @@
       <p class="text-danger" align="left" v-if="errors.has('title')">{{ errors.first('title') }}</p>
     </div>
     <div class="form-group">
-      <textarea v-model="body" class="form-control" id="body" rows="5"  name="body" :placeholder="this.$store.state.user.displayName" data-vv-as="body"  data-vv-delay="500" v-validate="'required'">
+      <textarea v-model="body" class="form-control" id="body" rows="5"  name="body" placeholder="Enter your thoughts ..." data-vv-as="body"  data-vv-delay="500" v-validate="'required'">
       </textarea>
       <p class="text-danger" align="left" v-if="errors.has('body')">{{ errors.first('body') }}</p>
     </div class="form-group" >
